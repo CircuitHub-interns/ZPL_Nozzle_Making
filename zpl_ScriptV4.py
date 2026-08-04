@@ -387,7 +387,7 @@ def build_zpl(part, number):
         "^XZ\n"
         "\n"
         "^XA\n"
-        "PR2"
+        "^PR2"
         f"^PW{PRINT_WIDTH}\n"
         f"^LL{LABEL_LENGTH}\n"
         "^LH0,0\n"
