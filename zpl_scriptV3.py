@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""zpl_scriptV3.py -- generate ONE circular "donut" nozzle label as raw ZPL for a
+"""zpl_scriptV2.py -- generate ONE circular "donut" nozzle label as raw ZPL for a
 Zebra ZT610 at 600 DPI.
 
 Each label carries:
@@ -27,7 +27,7 @@ ZPL template is from GEM_NOZZLE.txt. This file is self-contained (no sibling
 imports) per the project convention, so it can be handed off on its own.
 
 Standalone CLI usage (run with the project venv that has treepoem + Pillow):
-    ..\\..\\_\\Scripts\\python.exe zpl_scriptV3.py CH0204 --number 1234 --png preview_v3.png -o v3.zpl
+    ..\\..\\_\\Scripts\\python.exe zpl_scriptV2.py CH0204 --number 1234 --png preview.png -o v2.zpl
 
 See the RETOOL INTEGRATION HOOK block near the bottom -- generate_label() is the
 one function the website needs to call.
@@ -78,7 +78,7 @@ RING_FONT_PX          = 53    # TEXT SIZE: glyph height in dots (bigger = bigger
 
 RING_STROKE_WIDTH     = 1     # TEXT THICKNESS/BOLDNESS: outline dots around each glyph
                               #   (0 = font's normal weight, bigger = bolder/thicker)
-RING_RADIUS           = 96    # TEXT CURVATURE: radius of the text baseline in dots.
+RING_RADIUS           = 92    # TEXT CURVATURE: radius of the text baseline in dots.
                               #   This is the BLUE circle in the preview. Bigger = wider
                               #   ring + bigger empty middle. Keep font/2 inside the
                               #   INNER_RADIUS..OUTER_RADIUS annulus (59..133).
@@ -95,10 +95,10 @@ RING_SUPERSAMPLE      = 4     # TEXT CRISPNESS: internal render scale before the
                               #   600 dpi). 4-6 is plenty; higher only slows generation.
 
 # ---- Data Matrix (native ^BX -- printer-rendered, sharpest) --------------
-DM_MODULE         = 4    # DM SIZE: dots per module = the ^BX 'h' param. Side length =
-                         #   DM_MODULE * DM_SYMBOL_MODULES. 4 -> 40x40 dots = ~1.70mm square,
-                         #   the closest integer-dot size that still keeps the symbol
-                         #   small and fits the 10x10 ECC200 payload. The validator
+DM_MODULE         = 5    # DM SIZE: dots per module = the ^BX 'h' param. Side length =
+                         #   DM_MODULE * DM_SYMBOL_MODULES. 5 -> 50x50 dots = ~2.12mm square,
+                         #   the closest integer-dot size to the 2.28mm target from prior
+                         #   testing (6 -> 60 dots = 2.54mm, further off). The validator
                          #   below refuses anything that overruns the annulus.
 DM_SYMBOL_MODULES = 10   # !!! DO NOT CHANGE !!! The "N####" payload only fits the 10x10
                          #   ECC200 symbol (3 data + 5 ECC codewords). Emitted as the ^BX
@@ -379,19 +379,17 @@ def build_zpl(part, number):
         "^XA\n"
         "~TA000\n"
         "~JSN\n"
-        "^MMP\n"
+        "^MMT\n"
         "^MPE\n"
-        "~SD14\n"
+        "~SD20\n"
         "^JZY\n"
         "^MFN,N\n"
         "^XZ\n"
         "\n"
         "^XA\n"
-        "^PR2\n"
-        "^PW400\n"
+        f"^PW{PRINT_WIDTH}\n"
         f"^LL{LABEL_LENGTH}\n"
         "^LH0,0\n"
-        "; LH118, 2\n"
         "^MNM,0\n"
         "^MTT\n"
         "^PMN\n"

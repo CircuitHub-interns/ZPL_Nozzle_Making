@@ -78,7 +78,7 @@ RING_FONT_PX          = 53    # TEXT SIZE: glyph height in dots (bigger = bigger
 
 RING_STROKE_WIDTH     = 1     # TEXT THICKNESS/BOLDNESS: outline dots around each glyph
                               #   (0 = font's normal weight, bigger = bolder/thicker)
-RING_RADIUS           = 96    # TEXT CURVATURE: radius of the text baseline in dots.
+RING_RADIUS           = 92    # TEXT CURVATURE: radius of the text baseline in dots.
                               #   This is the BLUE circle in the preview. Bigger = wider
                               #   ring + bigger empty middle. Keep font/2 inside the
                               #   INNER_RADIUS..OUTER_RADIUS annulus (59..133).
